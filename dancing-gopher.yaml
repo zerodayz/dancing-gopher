@@ -1,0 +1,46 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: dancing-gopher
+  labels:
+    name: dancing-gopher
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dancing-gopher
+  namespace: dancing-gopher
+  labels:
+    name: dancing-gopher
+spec:
+  containers:
+    - name: dancing-gopher
+      image: quay.io/zerodayz/keepsake:latest
+      ports:
+        - name: dancing-gopher
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dancing-gopher-svc
+  namespace: dancing-gopher
+spec:
+  selector:
+    name: dancing-gopher
+  ports:
+    - nodePort: 0
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: dancing-gopher
+  namespace: dancing-gopher
+spec:
+  to:
+    kind: Service
+    name: dancing-gopher-svc
+  path: "/"
