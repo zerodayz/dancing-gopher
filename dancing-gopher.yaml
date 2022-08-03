@@ -5,20 +5,29 @@ metadata:
   labels:
     name: dancing-gopher
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: dancing-gopher
-  namespace: dancing-gopher
   labels:
     name: dancing-gopher
+  namespace: dancing-gopher
 spec:
-  containers:
-    - name: dancing-gopher
-      image: quay.io/zerodayz/dancing-gopher:latest
-      ports:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: dancing-gopher
+  template:
+    metadata:
+      labels:
+        name: dancing-gopher
+    spec:
+      containers:
         - name: dancing-gopher
-          containerPort: 8080
+          image: quay.io/zerodayz/dancing-gopher:latest
+          ports:
+            - name: dancing-gopher
+              containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
