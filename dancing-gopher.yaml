@@ -40,10 +40,10 @@ spec:
           ports:
             - name: dancing-gopher
               containerPort: 8080
-      volumeMounts:
-        - mountPath: /certs
-          name: dancing-gopher-certificates
-          readOnly: true
+          volumeMounts:
+            - mountPath: /certs
+              name: dancing-gopher-certificates
+              readOnly: true
       volumes:
         - name: dancing-gopher-certificates
           secret:
