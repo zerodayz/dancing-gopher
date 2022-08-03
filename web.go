@@ -56,9 +56,9 @@ func main() {
 	http.HandleFunc("/dashboard", DashboardHandler)
 	http.HandleFunc("/", RootHandler)
 
-	log.Println("Starting dancing-gopher server at", httpPort)
-	go http.ListenAndServe(httpPort, nil)
-	log.Println("Starting dancing-gopher server at", httpsPort)
 	log.Println("Serving SSL Key:", key, "and SSL Cert:", cert)
+	log.Println("Starting dancing-gopher server at", httpsPort)
 	http.ListenAndServeTLS(httpsPort, cert, key, nil)
+	log.Println("Starting dancing-gopher server at", httpPort)
+	http.ListenAndServe(httpPort, nil)
 }
