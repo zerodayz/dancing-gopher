@@ -19,6 +19,21 @@ type podInfo struct {
 	DisplayPodName string
 }
 
+var (
+	key       string = "/certs/tls.key"
+	cert      string = "/certs/tls.crt"
+	httpPort  string = ":8080"
+	httpsPort string = ":8443"
+)
+
+func redirect(w http.ResponseWriter, r *http.Request) {
+	target := "https://" + r.Host + r.URL.Path
+	if len(r.URL.RawQuery) > 0 {
+		target += "?" + r.URL.RawQuery
+	}
+	http.Redirect(w, r, target, http.StatusTemporaryRedirect)
+}
+
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 	podName, err := os.Hostname()
 	if err != nil {
@@ -48,6 +63,10 @@ func main() {
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
 	http.HandleFunc("/dashboard", DashboardHandler)
 	http.HandleFunc("/", RootHandler)
-	log.Println("Starting dancing-gopher webserver at :8080")
-	http.ListenAndServe(":8080", nil)
+
+	log.Println("Starting dancing-gopher server at", httpPort)
+	go http.ListenAndServe(httpPort, http.HandlerFunc(redirect))
+	log.Println("Starting dancing-gopher server at", httpsPort)
+	log.Println("Serving SSL Key:", key, "and SSL Cert:", cert)
+	go http.ListenAndServeTLS(httpsPort, cert, key, nil)
 }

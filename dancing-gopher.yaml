@@ -5,6 +5,18 @@ metadata:
   labels:
     name: dancing-gopher
 ---
+apiVersion: v1
+data:
+  tls.crt:
+  tls.key:
+kind: Secret
+metadata:
+  labels:
+    name: dancing-gopher
+  name: dancing-gopher-certs
+  namespace: dancing-gopher
+type: Opaque
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,6 +40,16 @@ spec:
           ports:
             - name: dancing-gopher
               containerPort: 8080
+      volumeMounts:
+        - mountPath: /certs
+          name: dancing-gopher-certificates
+          readOnly: true
+      volumes:
+        - name: dancing-gopher-certificates
+          secret:
+            defaultMode: 420
+            optional: false
+            secretName: dancing-gopher-certs
 ---
 apiVersion: v1
 kind: Service
@@ -38,17 +60,38 @@ spec:
   selector:
     name: dancing-gopher
   ports:
-    - nodePort: 0
+    - name: gopher-http
       port: 80
       protocol: TCP
       targetPort: 8080
+    - name: gopher-https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
 ---
 apiVersion: v1
 kind: Route
 metadata:
-  name: dancing-gopher
+  name: dancing-gopher-https
   namespace: dancing-gopher
 spec:
+  port:
+    targetPort: gopher-https
+  tls:
+    termination: reencrypt
+  to:
+    kind: Service
+    name: dancing-gopher-svc
+  path: "/"
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: dancing-gopher-http
+  namespace: dancing-gopher
+spec:
+  port:
+    targetPort: gopher-http
   to:
     kind: Service
     name: dancing-gopher-svc
