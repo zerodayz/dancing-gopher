@@ -78,11 +78,10 @@ spec:
   port:
     targetPort: gopher-https
   tls:
-    termination: reencrypt
+    termination: passthrough
   to:
     kind: Service
     name: dancing-gopher-svc
-  path: "/"
 ---
 apiVersion: v1
 kind: Route
