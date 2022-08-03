@@ -15,7 +15,7 @@ metadata:
 spec:
   containers:
     - name: dancing-gopher
-      image: quay.io/zerodayz/keepsake:latest
+      image: quay.io/zerodayz/dancing-gopher:latest
       ports:
         - name: dancing-gopher
           containerPort: 8080
