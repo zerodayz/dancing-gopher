@@ -60,9 +60,9 @@ metadata:
   namespace: dancing-gopher
 spec:
   selector:
-    name: gopher-http
+    name: dancing-gopher
   ports:
-    - name: gopher-http
+    - nodePort: 0
       port: 80
       protocol: TCP
       targetPort: 8080
@@ -74,9 +74,9 @@ metadata:
   namespace: dancing-gopher
 spec:
   selector:
-    name: gopher-https
+    name: dancing-gopher
   ports:
-    - name: gopher-https
+    - nodePort: 0
       port: 443
       protocol: TCP
       targetPort: 8443
@@ -84,26 +84,22 @@ spec:
 apiVersion: v1
 kind: Route
 metadata:
-  name: dancing-gopher-https
-  namespace: dancing-gopher
-spec:
-  port:
-    targetPort: gopher-https
-  tls:
-    termination: passthrough
-  to:
-    kind: Service
-    name: dancing-gopher-svc-https
----
-apiVersion: v1
-kind: Route
-metadata:
   name: dancing-gopher-http
   namespace: dancing-gopher
 spec:
-  port:
-    targetPort: gopher-http
   to:
     kind: Service
     name: dancing-gopher-svc-http
   path: "/"
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: dancing-gopher-https
+  namespace: dancing-gopher
+spec:
+  to:
+    kind: Service
+    name: dancing-gopher-svc-https
+  tls:
+    termination: passthrough
