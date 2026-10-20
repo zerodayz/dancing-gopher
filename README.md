@@ -41,6 +41,6 @@ oc delete svc dancing-gopher -n default
 oc delete bc dancing-gopher -n default
 oc delete is dancing-gopher -n default
 oc get secret -n default | grep dancing-gopher
-oc get all -n default -l deployment=dancing-gopher)
+oc get all -n default -l deployment=dancing-gopher
 ```
 
