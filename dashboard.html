@@ -18,6 +18,18 @@
             <img src="img/gopher.gif" alt="Dance! Dance! Dance!"/>
         </td>
     </tr>
+    <tr>
+        <td>
+            Refresh #<span id="counter"></span> &mdash; last refreshed at <span id="timestamp"></span>
+        </td>
+    </tr>
 </table>
+
+<script>
+    var count = parseInt(localStorage.getItem('dgRefreshCount') || '0', 10) + 1;
+    localStorage.setItem('dgRefreshCount', count);
+    document.getElementById('counter').textContent = count;
+    document.getElementById('timestamp').textContent = new Date().toLocaleTimeString();
+</script>
 </body>
 </html>
