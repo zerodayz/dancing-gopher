@@ -19,8 +19,10 @@
         </td>
     </tr>
     <tr>
-        <td>
+        <td style="text-align: center">
             Refresh #<span id="counter"></span> &mdash; last refreshed at <span id="timestamp"></span>
+            <br/>
+            <button onclick="resetCounter()">Reset counter</button>
         </td>
     </tr>
 </table>
@@ -28,8 +30,13 @@
 <script>
     var count = parseInt(localStorage.getItem('dgRefreshCount') || '0', 10) + 1;
     localStorage.setItem('dgRefreshCount', count);
-    document.getElementById('counter').textContent = count;
-    document.getElementById('timestamp').textContent = new Date().toLocaleTimeString();
+    document.getElementById('counter').textContent
+    document.getElementById('timestamp').textContentring();
+
+    function resetCounter() {
+        localStorage.removeItem('dgRefreshCount');
+        location.reload();
+    }
 </script>
 </body>
 </html>
