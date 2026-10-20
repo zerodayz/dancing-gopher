@@ -31,3 +31,16 @@ oc create route passthrough dancing-gopher-tls --service=dancing-gopher --port=8
 ```
 oc get routes
 ```
+
+## Remove
+
+```
+oc delete route dancing-gopher dancing-gopher-tls -n default
+oc delete deployment dancing-gopher -n default
+oc delete svc dancing-gopher -n default
+oc delete bc dancing-gopher -n default
+oc delete is dancing-gopher -n default
+oc get secret -n default | grep dancing-gopher
+oc get all -n default -l deployment=dancing-gopher)
+```
+
