@@ -1,4 +1,4 @@
-## Generate certs
+## Deployment
 
 ```bash
 oc new-app https://github.com/zerodayz/dancing-gopher --name=dancing-gopher
