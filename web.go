@@ -52,13 +52,21 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
-	http.HandleFunc("/dashboard", DashboardHandler)
-	http.HandleFunc("/", RootHandler)
+        http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
+        http.HandleFunc("/dashboard", DashboardHandler)
+        http.HandleFunc("/", RootHandler)
 
-	log.Println("Serving SSL Key:", key, "and SSL Cert:", cert)
-	log.Println("Starting dancing-gopher server at", httpPort)
-	go http.ListenAndServe(httpPort, nil)
-	log.Println("Starting dancing-gopher server at", httpsPort)
-	log.Fatal(http.ListenAndServeTLS(httpsPort, cert, key, nil))
+        log.Println("Starting dancing-gopher server at", httpPort)
+        go func() {
+                log.Fatal(http.ListenAndServe(httpPort, nil))
+        }()
+
+        if _, err := os.Stat(cert); err == nil {
+                log.Println("Serving SSL Key:", key, "and SSL Cert:", cert)
+                log.Println("Starting dancing-gopher server at", httpsPort)
+                log.Fatal(http.ListenAndServeTLS(httpsPort, cert, key, nil))
+        } else {
+                log.Println("No TLS cert found at", cert, "- skipping HTTPS listener")
+                select {} // block forever
+        }
 }
