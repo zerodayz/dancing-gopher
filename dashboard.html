@@ -30,7 +30,7 @@
 <script>
     var count = parseInt(localStorage.getItem('dgRefreshCount') || '0', 10) + 1;
     localStorage.setItem('dgRefreshCount', count);
-    document.getElementById('counter').textContent
+    document.getElementById('counter').textContent = count;
     document.getElementById('timestamp').textContent = new Date().toLocaleTimeString();
 
     function resetCounter() {
