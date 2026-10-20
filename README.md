@@ -6,12 +6,10 @@ oc new-app https://github.com/zerodayz/dancing-gopher --name=dancing-gopher
 
 Wait for the deployment to finish
 ```
-$ oc get pods
-NAME                     READY   STATUS    RESTARTS   AGE
-dancing-gopher-1-build   1/1     Running   0          36s
+oc get pods -w
 ```
 
-And 
+It should look like this:
 ```
 $ oc get pods
 NAME                             READY   STATUS      RESTARTS   AGE
